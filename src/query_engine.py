@@ -5,7 +5,7 @@ from typing import Any
 
 from openai.types.chat import ChatCompletionChunk, ChatCompletionMessageParam
 
-from src.llm import query
+from src.llm import call_model
 from src.tools import execute_tool_call, openai_tools
 
 def query_engine(user_query: str) -> Iterator[str]:
@@ -21,7 +21,7 @@ def query_engine(user_query: str) -> Iterator[str]:
     tool_call_acc: dict[int, dict[str, Any]] = {}
     last_chunk: ChatCompletionChunk | None = None
 
-    for chunk in query(messages, tools=tools):
+    for chunk in call_model(messages, tools=tools):
       last_chunk = chunk
       delta = chunk.choices[0].delta
       content = getattr(delta, "content", None)
